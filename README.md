@@ -1,5 +1,5 @@
 # Projekt Bazy - Sklep z ubraniami
-Po uruchomieniu kontenerów trzeba jeszce ręcznie (zgodnie z prezentacją, jak w slajdach D–I)
+Po uruchomieniu kontenerów trzeba narazie ręcznie ustawić replikację(zgodnie z prezentacją, jak w slajdach D–I)
 
 ## 1. SSH między węzłami (na obu):
     su - postgres
@@ -15,14 +15,14 @@ Po uruchomieniu kontenerów trzeba jeszce ręcznie (zgodnie z prezentacją, jak 
 ## 2. Plik repmgr.conf (węzeł 1: /var/lib/postgresql/18/repmgr.conf):
     node_id = 1
     node_name = wezel1
-    conninfo = 'host=030wezel1 user=repmgr password=haslo dbname=repmgr'
+    conninfo = 'host=wezel1 user=repmgr password=haslo dbname=repmgr'
     data_directory = '/var/lib/postgresql/18/docker'
     service_start_command   = '/usr/lib/postgresql/18/bin/pg_ctl -D /var/lib/postgresql/18/docker start'
     service_stop_command    = '/usr/lib/postgresql/18/bin/pg_ctl -D /var/lib/postgresql/18/docker stop'
     service_restart_command = '/usr/lib/postgresql/18/bin/pg_ctl -D /var/lib/postgresql/18/docker restart'
     service_reload_command  = '/usr/lib/postgresql/18/bin/pg_ctl -D /var/lib/postgresql/18/docker reload'
 
-    Dla węzła 2 to samo z node_id = 2, node_name = wezel2, host=030wezel2.
+    Dla węzła 2 to samo z node_id = 2, node_name = wezel2, host=wezel2.
 
 ## 3. Podlinkuj plik (na obu, jako root):
     ln -s /var/lib/postgresql/18/repmgr.conf /etc/repmgr.conf

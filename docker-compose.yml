@@ -1,0 +1,32 @@
+services:
+  wezel1:
+    build: .
+    container_name: wezel1
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - pg_wezel1:/var/lib/postgresql
+      - ./wezel1/docker:/config
+      - ./wezel1/docker/repmgr.conf:/etc/repmgr.conf
+    networks:
+      - repmgrnet
+
+  wezel2:
+    build: .
+    container_name: wezel2
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - pg_wezel2:/var/lib/postgresql
+      - ./wezel2/docker:/config
+      - ./wezel1/docker/repmgr.conf:/etc/repmgr.conf
+    networks:
+      - repmgrnet
+
+volumes:
+  pg_wezel1:
+  pg_wezel2:
+
+networks:
+  repmgrnet:
+    driver: bridge

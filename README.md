@@ -10,18 +10,9 @@ Po uruchomieniu kontenerów trzeba jeszce ręcznie (zgodnie z prezentacją, jak 
 
     ssh-copy-id postgres@030wezel1   # z węzła 2
 
-## 2. Konfiguracja pg_hba.conf i postgresql.conf (na obu węzłach):
-    # pg_hba.conf — dodaj NA POCZĄTKU pliku
-    local repmgr repmgr trust
-    host  repmgr repmgr 0.0.0.0/0 trust
-    host  replication repmgr 0.0.0.0/0 trust
-
-    # postgresql.conf — odkomentuj/zmień
-    listen_addresses = '*'
-    shared_preload_libraries = 'repmgr'
 
 
-## 3. Plik repmgr.conf (węzeł 1: /var/lib/postgresql/18/repmgr.conf):
+## 2. Plik repmgr.conf (węzeł 1: /var/lib/postgresql/18/repmgr.conf):
     node_id = 1
     node_name = wezel1
     conninfo = 'host=030wezel1 user=repmgr password=haslo dbname=repmgr'
@@ -33,7 +24,7 @@ Po uruchomieniu kontenerów trzeba jeszce ręcznie (zgodnie z prezentacją, jak 
 
     Dla węzła 2 to samo z node_id = 2, node_name = wezel2, host=030wezel2.
 
-## 4. Podlinkuj plik (na obu, jako root):
+## 3. Podlinkuj plik (na obu, jako root):
     ln -s /var/lib/postgresql/18/repmgr.conf /etc/repmgr.conf
 
     Następnie restart obu kontenerów, a potem kroki G i H z prezentacji — rejestracja mastera i sklonowanie węzła 2.

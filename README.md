@@ -9,7 +9,7 @@
     //w osobnym terminalu włacz podgląd logów wenzl2
     docker-compose logs -f wezel2
 
-    //sumulacja awari wenzla2
+    //symulacja awarii wenzl2
     docker-compose stop wezel1
 
 Po okołu 60 sekundach wenzel2 zostanie wypromowany do praimary :D

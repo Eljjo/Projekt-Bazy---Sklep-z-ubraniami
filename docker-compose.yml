@@ -4,6 +4,8 @@ services:
     container_name: wezel1
     environment:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      NODE_ID: "1"
+      PGDATA: "/var/lib/postgresql/18/data"
     volumes:
       - pg_wezel1:/var/lib/postgresql
       - ./wezel1/docker:/config
@@ -16,10 +18,14 @@ services:
     container_name: wezel2
     environment:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      NODE_ID: "2"
+      PGDATA: "/var/lib/postgresql/18/data"
+    depends_on:
+      - wezel1
     volumes:
       - pg_wezel2:/var/lib/postgresql
       - ./wezel2/docker:/config
-      - ./wezel1/docker/repmgr.conf:/etc/repmgr.conf
+      - ./wezel2/docker/repmgr.conf:/etc/repmgr.conf
     networks:
       - repmgrnet
 

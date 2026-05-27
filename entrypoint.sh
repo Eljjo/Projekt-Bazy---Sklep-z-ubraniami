@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 /usr/sbin/sshd
 
 echo "Uruchamiam z NODE_ID=$NODE_ID"
@@ -20,6 +21,7 @@ if [ "$NODE_ID" = "1" ]; then
 
     gosu postgres psql -c "CREATE USER repmgr WITH REPLICATION LOGIN SUPERUSER PASSWORD 'haslo';"
     gosu postgres psql -c "CREATE DATABASE repmgr OWNER repmgr;"
+
 
     gosu postgres repmgr -f /etc/repmgr.conf primary register
 
@@ -52,7 +54,6 @@ fi
 
 echo "START POSTGRES"
 gosu postgres pg_ctl -D "$PGDATA" -o "-c config_file=/config/postgresql.conf" start
-
 
 if [ "$NODE_ID" = "2" ]; then
   until gosu postgres pg_isready; do

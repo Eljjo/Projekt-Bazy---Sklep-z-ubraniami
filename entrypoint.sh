@@ -22,6 +22,11 @@ if [ "$NODE_ID" = "1" ]; then
     gosu postgres psql -c "CREATE USER repmgr WITH REPLICATION LOGIN SUPERUSER PASSWORD 'haslo';"
     gosu postgres psql -c "CREATE DATABASE repmgr OWNER repmgr;"
 
+    if [ -f "/config/schema.sql" ]; then
+      echo "WYKRYTO PLIK SCHEMA.SQL - URUCHAMIAM IMPORT..."
+      gosu postgres psql -d postgres -f /config/schema.sql
+    fi
+
 
     gosu postgres repmgr -f /etc/repmgr.conf primary register
 

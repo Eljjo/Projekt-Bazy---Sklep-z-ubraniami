@@ -1,0 +1,14 @@
+flowchart LR
+    U[Administrator / aplikacja testowa<br/>psql / pgAdmin / docker exec]
+    B[Backup na hoście lokalnym<br/>pg_dump / pg_restore<br/>clothing_shop_backup_*.dump]
+
+    subgraph NET[Sieć Docker: repmgrnet 172.30.0.0/24]
+        W1[wezel1<br/>PostgreSQL 18 primary<br/>IP: 172.30.0.11<br/>DB: clothing_shop<br/>schematy: shop, admin]
+        W2[wezel2<br/>PostgreSQL 18 standby/replica<br/>IP: 172.30.0.12<br/>hot_standby=on<br/>repmgrd automatic failover]
+    end
+
+    U -->|zapis/odczyt, port 5432| W1
+    U -.->|odczyt z repliki, port 5433| W2
+    W1 -->|streaming replication / repmgr| W2
+    W1 -->|backup| B
+    B -.->|restore testowy do clothing_shop_restore_test| W1

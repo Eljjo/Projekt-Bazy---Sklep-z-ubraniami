@@ -1,0 +1,23 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.65", ranksep="0.9", fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", color="#334155", penwidth=1.4, margin="0.12,0.08"];
+  edge [fontname="DejaVu Sans", color="#475569", penwidth=1.3, arrowsize=0.8];
+
+  users [label="Administrator / aplikacja testowa\npsql / pgAdmin / docker exec", fillcolor="#e0f2fe"];
+  backup [label="Backup na hoście lokalnym\npg_dump / pg_restore\nplik: clothing_shop_backup_*.dump", fillcolor="#f1f5f9"];
+
+  subgraph cluster_docker {
+    label="Sieć Docker: repmgrnet 172.30.0.0/24";
+    color="#94a3b8";
+    style="rounded";
+
+    wezel1 [label="wezel1\nPostgreSQL 18 primary\nIP: 172.30.0.11\nDB: clothing_shop\nschematy: shop, admin", fillcolor="#dcfce7"];
+    wezel2 [label="wezel2\nPostgreSQL 18 standby/replica\nIP: 172.30.0.12\nhot_standby = on\nrepmgrd: automatic failover", fillcolor="#fef9c3"];
+  }
+
+  users -> wezel1 [label="zapis/odczyt\nport 5432"];
+  users -> wezel2 [label="odczyt z repliki\nport 5433", style=dashed];
+  wezel1 -> wezel2 [label="streaming replication\nrepmgr", color="#15803d"];
+  wezel1 -> backup [label="backup"];
+  backup -> wezel1 [label="restore testowy\ndo clothing_shop_restore_test", style=dashed];
+}
